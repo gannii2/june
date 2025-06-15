@@ -94,9 +94,9 @@ public class RPG_Game {
 						if (job == 1)
 							System.out.println("2. 전사의 삼단 베기");
 						else if (job == 2)
-							System.out.println("2. 궁수의 헤드샷");
-						else if (job == 3)
 							System.out.println("2. 마법사의 파이어볼");
+						else if (job == 3)
+							System.out.println("2. 궁수의 헤드샷");
 						else
 							System.out.println("2. 전사의 삼단 베기");
 
@@ -107,6 +107,7 @@ public class RPG_Game {
 						} else {
 							hero.specialAttack(monster);
 						}
+						heroturn = !heroturn;
 					} else {
 						System.out.printf("%s의 공격\n", monster.getName());
 						hero.attacked(monster.getPower());
@@ -116,43 +117,43 @@ public class RPG_Game {
 						}
 						heroturn = !heroturn;
 					}
-
-					if (!hero.isAlive()) {
-						System.out.println("히어로가 쓰러졌습니다. 부활하시겠습니다?");
-						System.out.println("1. 부활 \n2. 게임종료");
-						System.out.print("선택: ");
-						int revivalChoice = sc.nextInt();
-						if (revivalChoice == 1) {
-							System.out.println("히어로가 부활합니다...\n히어로의 능력치가 초기화됩니다.");
-							hero.setHp(100);
-							hero.setLevel(1);
-							hero.setExperience(0);
-							hero.setMoney(0);
-							hero.printStatus();
-						} else {
-							System.out.println("게임을 종료합니다.");
-							sc.close();
-							return;
-						}
-					} else {
-						System.out.printf("%s를 처치했습니다!\n", monster.getName());
-						System.out.println("보상으로 경험치와 돈이 올라갑니다!");
-						hero.setExperience(hero.getExperience() + monster.getExpDrop());
-						hero.setMoney(hero.getMoney() + monster.getMoneyDrop());
-
-						int oldLevel = hero.getLevel();
-						hero.levelUp();
+				}
+				if (!hero.isAlive()) {
+					System.out.println("히어로가 쓰러졌습니다. 부활하시겠습니다?");
+					System.out.println("1. 부활 \n2. 게임종료");
+					System.out.print("선택: ");
+					int revivalChoice = sc.nextInt();
+					if (revivalChoice == 1) {
+						System.out.println("히어로가 부활합니다...\n히어로의 능력치가 초기화됩니다.");
+						hero.setHp(100);
+						hero.setLevel(1);
+						hero.setExperience(0);
+						hero.setMoney(0);
 						hero.printStatus();
+					} else {
+						System.out.println("게임을 종료합니다.");
+						sc.close();
+						return;
+					}
+				} else {
+					System.out.printf("%s를 처치했습니다!\n", monster.getName());
+					System.out.println("보상으로 경험치와 돈이 올라갑니다!");
+					hero.setExperience(hero.getExperience() + monster.getExpDrop());
+					hero.setMoney(hero.getMoney() + monster.getMoneyDrop());
 
-						if (hero.getLevel() > oldLevel) {
-							for (int i = oldLevel + 1; i <= hero.getLevel(); i++) {
-								System.out.printf("[새로운 미션] 레벨 %d 달성! 미션을 확인하세요.\n", i);
-								mission.giveLevelMission(hero, i);
-							}
+					int oldLevel = hero.getLevel();
+					hero.levelUp();
+					hero.printStatus();
+
+					if (hero.getLevel() > oldLevel) {
+						for (int i = oldLevel + 1; i <= hero.getLevel(); i++) {
+							System.out.printf("[새로운 미션] 레벨 %d 달성! 미션을 확인하세요.\n", i);
+							mission.giveLevelMission(hero, i);
 						}
-						mission.checkAndRewardMission(hero, monster);
 					}
 				}
+				mission.checkAndRewardMission(hero, monster);
+
 			} else if (choice == 2) {
 				System.out.println("**********************");
 				System.out.println("포션 상점에 입장하였습니다.\n");
